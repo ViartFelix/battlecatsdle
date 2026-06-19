@@ -1,11 +1,12 @@
 import app from '@adonisjs/core/services/app'
 import { defineConfig } from '@adonisjs/lucid'
+import env from '#start/env'
 
 const dbConfig = defineConfig({
   /**
    * Default connection used for all queries.
    */
-  connection: 'sqlite',
+  connection: env.get('DB_CONNECTION') ?? 'sqlite',
 
   /**
    * Pretty-print SQL debug output in development logs.
@@ -16,41 +17,41 @@ const dbConfig = defineConfig({
     /**
      * SQLite connection (default).
      */
-    sqlite: {
-      client: 'better-sqlite3',
-      connection: {
-        filename: app.tmpPath('db.sqlite3'),
-      },
-      useNullAsDefault: true,
-      migrations: {
-        naturalSort: true,
-        paths: ['database/migrations'],
-      },
-      /**
-       * Emit SQL queries to the logger in development.
-       */
-      debug: app.inDev,
-    },
+    // sqlite: {
+    //   client: 'better-sqlite3',
+    //   connection: {
+    //     filename: app.tmpPath('db.sqlite3'),
+    //   },
+    //   useNullAsDefault: true,
+    //   migrations: {
+    //     naturalSort: true,
+    //     paths: ['database/migrations'],
+    //   },
+    //   /**
+    //    * Emit SQL queries to the logger in development.
+    //    */
+    //   debug: app.inDev,
+    // },
 
     /**
      * PostgreSQL connection.
      * Install package to switch: npm install pg
      */
-    // pg: {
-    //   client: 'pg',
-    //   connection: {
-    //     host: env.get('DB_HOST'),
-    //     port: env.get('DB_PORT'),
-    //     user: env.get('DB_USER'),
-    //     password: env.get('DB_PASSWORD'),
-    //     database: env.get('DB_DATABASE'),
-    //   },
-    //   migrations: {
-    //     naturalSort: true,
-    //     paths: ['database/migrations'],
-    //   },
-    //   debug: app.inDev,
-    // },
+    pg: {
+      client: 'pg',
+      connection: {
+        host: env.get('DB_HOST') ?? '127.0.0.1',
+        port: (env.get('DB_PORT') ?? 5432) as number,
+        user: env.get('DB_USER'),
+        password: env.get('DB_PASSWORD'),
+        database: env.get('DB_DATABASE'),
+      },
+      migrations: {
+        naturalSort: true,
+        paths: ['database/migrations'],
+      },
+      debug: app.inDev,
+    },
 
     /**
      * MySQL / MariaDB connection.
