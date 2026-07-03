@@ -48,5 +48,7 @@ export default class extends BaseSchema {
 
   async down() {
     this.schema.dropTable(this.tableName)
+    this.schema.raw(`drop type if exists "${this.evolutions_enum_name}"`)
+    this.schema.raw(`drop type if exists "${this.rarity_enum_name}"`)
   }
 }
