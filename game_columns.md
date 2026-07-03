@@ -13,7 +13,7 @@
 - Cost
 - Form (normal, evolved, true, ultra)
 - Rarity (Normal, Special, Rare, Super Rare, Uber Rare, Legend Rare)
-- Talents (if the target unit has some)
+- Talents (if the target unit has some) -> later
 
 # Hints
 To help the player find the correct unit.
