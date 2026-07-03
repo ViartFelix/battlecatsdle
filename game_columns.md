@@ -43,7 +43,7 @@ Give the first sentence of the description
 
 ### When 15+ guesses
 
-Give the whole descrption
+Give the whole description
 
 ### When 18+ guesses
 Give 1-3 letters of the name, depending on the length of the target unit.
