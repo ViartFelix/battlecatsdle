@@ -6,8 +6,8 @@
 
 # Columns
 
-- Unit name
-- Traits
+- Unit name **(what the user has in order to guess)**
+- Traits (Floating, Red, Traitless, Angel, etc.)
 - Abilities (Kb, slow, weaken, immune to waves, etc.)
 - Attack type (Single, Area, LR, Omni)
 - Cost
