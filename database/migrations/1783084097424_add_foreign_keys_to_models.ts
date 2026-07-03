@@ -45,8 +45,8 @@ export default class extends BaseSchema {
     })
 
     this.schema.alterTable('unit_collaboration', (table) => {
-      table.dropForeign(['unit_id', 'unit_collaboration'])
-      table.dropColumns('unit_id', 'unit_collaboration')
+      table.dropForeign(['unit_id', 'collaboration_id'])
+      table.dropColumns('unit_id', 'collaboration_id')
     })
 
     this.schema.dropTableIfExists('unit_ability')
