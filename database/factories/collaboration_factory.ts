@@ -6,7 +6,7 @@ export const CollaborationFactory = factory
   .define(Collaboration, async ({ faker }) => {
     return {
       label: faker.animal.fish(),
-      key: faker.word.verb({ length: { min: 1, max: 3 } }),
+      key: faker.helpers.uniqueArray(faker.word.verb, 1)[0],
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     }

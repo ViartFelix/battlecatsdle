@@ -6,7 +6,7 @@ export const TraitFactory = factory
   .define(Trait, async ({ faker }) => {
     return {
       label: faker.animal.horse(),
-      key: faker.word.verb({ length: { min: 1, max: 3 } }),
+      key: faker.helpers.uniqueArray(faker.word.verb, 1)[0],
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     }
