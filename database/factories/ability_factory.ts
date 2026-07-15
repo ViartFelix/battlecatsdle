@@ -9,6 +9,7 @@ export const AbilityFactory = factory
       key: faker.helpers.uniqueArray(faker.word.verb, 1)[0],
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
+      onTrait: Math.random() > 0.5,
     }
   })
   .build()
