@@ -1,0 +1,13 @@
+name: 'Setup Node JS'
+author: 'Félix VIART'
+description: 'Installs NodeJS with a NPM cache.'
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/setup-node@v7
+      with:
+        node-version: 24
+        cache: 'npm'
+
+    - run: npm ci
+      shell: bash

@@ -54,6 +54,25 @@ const dbConfig = defineConfig({
     },
 
     /**
+     * PostgreSQL connection, used for tests (docker-compose "postgres-test" service).
+     */
+    pg_test: {
+      client: 'pg',
+      connection: {
+        host: env.get('DB_TEST_HOST') ?? '127.0.0.1',
+        port: (env.get('DB_TEST_PORT') ?? 5433) as number,
+        user: env.get('DB_TEST_USER'),
+        password: env.get('DB_TEST_PASSWORD'),
+        database: env.get('DB_TEST_DATABASE'),
+      },
+      migrations: {
+        naturalSort: true,
+        paths: ['database/migrations'],
+      },
+      debug: app.inDev,
+    },
+
+    /**
      * MySQL / MariaDB connection.
      * Install package to switch: npm install mysql2
      */

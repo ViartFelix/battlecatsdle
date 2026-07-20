@@ -10,6 +10,21 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  postgres-test:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${DB_TEST_DATABASE}
+      POSTGRES_USER: ${DB_TEST_USER}
+      POSTGRES_PASSWORD: ${DB_TEST_PASSWORD}
+    ports:
+      - "${DB_TEST_PORT}:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    command: >
+      -c fsync=off
+      -c full_page_writes=off
+      -c synchronous_commit=off
+
   pgadmin:
     image: dpage/pgadmin4:latest
     environment:

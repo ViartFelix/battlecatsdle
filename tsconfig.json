@@ -3,5 +3,15 @@
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "./build"
-  }
+  },
+  "exclude": [
+    "${configDir}/inertia/**",
+    "${configDir}/node_modules/**",
+    "${configDir}/build/**",
+    "${configDir}/bower_components/**",
+    "${configDir}/jspm_packages/**",
+    "${configDir}/tmp/**",
+    "${configDir}/database/schema.ts",
+    "${configDir}/database/schema_rules.ts"
+  ]
 }
