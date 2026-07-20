@@ -19,9 +19,7 @@ test.group('Unit - Collaboration relation', (group) => {
     assert.equal(unit.collaborations[0].id, collaboration.id)
   })
 
-  test('detach() removes the pivot row without deleting the collaboration', async ({
-    assert,
-  }) => {
+  test('detach() removes the pivot row without deleting the collaboration', async ({ assert }) => {
     const unit: Unit = await UnitFactory.create()
     const collaboration: Collaboration = await CollaborationFactory.create()
     await unit.related('collaborations').attach([collaboration.id])
@@ -35,9 +33,7 @@ test.group('Unit - Collaboration relation', (group) => {
     assert.isFalse(collaboration.$isDeleted)
   })
 
-  test("attach() on one unit does not affect another unit's collaborations", async ({
-    assert,
-  }) => {
+  test("attach() on one unit does not affect another unit's collaborations", async ({ assert }) => {
     const [unitA, unitB]: Unit[] = await UnitFactory.createMany(2)
     const collaboration: Collaboration = await CollaborationFactory.create()
 
