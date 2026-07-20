@@ -1,6 +1,7 @@
 import factory from '@adonisjs/lucid/factories'
 import Trait from '#models/trait'
 import { DateTime } from 'luxon'
+import { UnitFactory } from '#database/factories/unit_factory'
 
 export const TraitFactory = factory
   .define(Trait, async ({ faker }) => {
@@ -11,4 +12,5 @@ export const TraitFactory = factory
       updatedAt: DateTime.now(),
     }
   })
+  .relation('units', () => UnitFactory)
   .build()

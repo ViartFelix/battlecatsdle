@@ -17,21 +17,21 @@ const dbConfig = defineConfig({
     /**
      * SQLite connection (default).
      */
-    // sqlite: {
-    //   client: 'better-sqlite3',
-    //   connection: {
-    //     filename: app.tmpPath('db.sqlite3'),
-    //   },
-    //   useNullAsDefault: true,
-    //   migrations: {
-    //     naturalSort: true,
-    //     paths: ['database/migrations'],
-    //   },
-    //   /**
-    //    * Emit SQL queries to the logger in development.
-    //    */
-    //   debug: app.inDev,
-    // },
+    sqlite: {
+      client: 'better-sqlite3',
+      connection: {
+        filename: app.tmpPath('db.sqlite3'),
+      },
+      useNullAsDefault: true,
+      migrations: {
+        naturalSort: true,
+        paths: ['database/migrations'],
+      },
+      /**
+       * Emit SQL queries to the logger in development.
+       */
+      debug: app.inDev,
+    },
 
     /**
      * PostgreSQL connection.

@@ -1,6 +1,7 @@
 import factory from '@adonisjs/lucid/factories'
 import Collaboration from '#models/collaboration'
 import { DateTime } from 'luxon'
+import { UnitFactory } from '#database/factories/unit_factory'
 
 export const CollaborationFactory = factory
   .define(Collaboration, async ({ faker }) => {
@@ -11,4 +12,5 @@ export const CollaborationFactory = factory
       updatedAt: DateTime.now(),
     }
   })
+  .relation('units', () => UnitFactory)
   .build()

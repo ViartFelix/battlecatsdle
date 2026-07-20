@@ -3,6 +3,9 @@ import Unit from '#models/unit'
 import { DateTime } from 'luxon'
 import UnitRarity from '../../app/enums/unit_rarity.js'
 import UnitEvolution from '../../app/enums/unit_evolution.js'
+import { AbilityFactory } from '#database/factories/ability_factory'
+import { TraitFactory } from '#database/factories/trait_factory'
+import { CollaborationFactory } from '#database/factories/collaboration_factory'
 
 export const UnitFactory = factory
   .define(Unit, async ({ faker }) => {
@@ -19,4 +22,7 @@ export const UnitFactory = factory
       cost: faker.number.int({ min: 50, max: 6200 }),
     }
   })
+  .relation('abilities', () => AbilityFactory)
+  .relation('traits', () => TraitFactory)
+  .relation('collaborations', () => CollaborationFactory)
   .build()
