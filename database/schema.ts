@@ -7,6 +7,109 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class AbilitySchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'key', 'label', 'onTrait', 'updatedAt'] as const
+  $columns = AbilitySchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare key: string
+  @column()
+  declare label: string
+  @column()
+  declare onTrait: boolean | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class CollaborationSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'key', 'label', 'updatedAt'] as const
+  $columns = CollaborationSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare key: string
+  @column()
+  declare label: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class TraitSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'key', 'label', 'updatedAt'] as const
+  $columns = TraitSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare key: string
+  @column()
+  declare label: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class UnitAbilitySchema extends BaseModel {
+  static $columns = ['abilityId', 'id', 'unitId'] as const
+  $columns = UnitAbilitySchema.$columns
+  @column()
+  declare abilityId: number
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare unitId: number
+}
+
+export class UnitCollaborationSchema extends BaseModel {
+  static $columns = ['collaborationId', 'id', 'unitId'] as const
+  $columns = UnitCollaborationSchema.$columns
+  @column()
+  declare collaborationId: number
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare unitId: number
+}
+
+export class UnitTraitSchema extends BaseModel {
+  static $columns = ['id', 'traitId', 'unitId'] as const
+  $columns = UnitTraitSchema.$columns
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare traitId: number
+  @column()
+  declare unitId: number
+}
+
+export class UnitSchema extends BaseModel {
+  static $columns = ['cost', 'createdAt', 'description', 'evolution', 'id', 'image', 'name', 'rarity', 'updatedAt'] as const
+  $columns = UnitSchema.$columns
+  @column()
+  declare cost: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare description: string | null
+  @column()
+  declare evolution: any
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare image: string | null
+  @column()
+  declare name: string
+  @column()
+  declare rarity: any
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class UserSchema extends BaseModel {
   static $columns = ['createdAt', 'email', 'id', 'password', 'updatedAt', 'username'] as const
   $columns = UserSchema.$columns

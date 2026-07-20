@@ -14,7 +14,7 @@ export default class User extends compose(UserSchema, withAuthFinder(hash)) {
    * Returns the first letter of first and last name if available,
    * otherwise returns the first two characters of the email username.
    */
-  get initials() {
+  get initials(): string {
     return `${this.username.slice(0, 2)}`.toUpperCase()
   }
 }
