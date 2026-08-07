@@ -67,6 +67,7 @@
     "@adonisjs/static": "^2.0.1",
     "@adonisjs/vite": "^5.1.1",
     "@vinejs/vine": "^4.4.0",
+    "adonisjs-scheduler": "^2.8.0",
     "better-sqlite3": "^12.10.0",
     "edge.js": "^6.5.1",
     "luxon": "^3.7.2",
