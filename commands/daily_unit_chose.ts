@@ -46,8 +46,6 @@ export default class DailyUnitChose extends BaseCommand {
     this.logger.success(
       `Successfully set unit '${chosenUnit.name}' (#${chosenUnit.id}) to the daily unit for the ${today.toFormat('ccc dd/LL/yyyy')}.`
     )
-
-    await this.terminate()
   }
 
   /**
