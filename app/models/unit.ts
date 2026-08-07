@@ -1,9 +1,10 @@
 import { UnitSchema } from '#database/schema'
-import { type ManyToMany } from '@adonisjs/lucid/types/relations'
+import { type HasMany, type ManyToMany } from '@adonisjs/lucid/types/relations'
 import Ability from '#models/ability'
-import { manyToMany } from '@adonisjs/lucid/orm'
+import { hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import Trait from '#models/trait'
 import Collaboration from '#models/collaboration'
+import DailyUnit from '#models/daily_unit'
 
 export default class Unit extends UnitSchema {
   @manyToMany(() => Ability, {
@@ -20,4 +21,7 @@ export default class Unit extends UnitSchema {
     pivotTable: 'unit_collaboration',
   })
   declare collaborations: ManyToMany<typeof Collaboration>
+
+  @hasMany(() => DailyUnit)
+  declare dailyUnits: HasMany<typeof DailyUnit>
 }

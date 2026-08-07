@@ -39,6 +39,21 @@ export class CollaborationSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class DailyUnitSchema extends BaseModel {
+  static $columns = ['createdAt', 'day', 'id', 'unitId', 'updatedAt'] as const
+  $columns = DailyUnitSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column.date()
+  declare day: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare unitId: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class TraitSchema extends BaseModel {
   static $columns = ['createdAt', 'id', 'key', 'label', 'updatedAt'] as const
   $columns = TraitSchema.$columns

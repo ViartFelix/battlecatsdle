@@ -9,6 +9,8 @@ import type Ability from '#models/ability'
 import type Collaboration from '#models/collaboration'
 import type Unit from '#models/unit'
 import { faker } from '@faker-js/faker'
+import type DailyUnit from '#models/daily_unit'
+import { DailyUnitFactory } from '#database/factories/daily_unit_factory'
 
 /**
  * Main app seeder.
@@ -53,6 +55,14 @@ export default class extends BaseSeeder {
               .map((e) => e.id)
           )
       }
+    }
+
+    // add daily units
+    const daily: DailyUnit[] = await DailyUnitFactory.makeMany(10)
+
+    for (const day of daily) {
+      await day.related('unit').associate(faker.helpers.uniqueArray(units, 1)[0])
+      await day.save()
     }
   }
 }
