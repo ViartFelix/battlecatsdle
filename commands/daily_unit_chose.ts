@@ -1,4 +1,4 @@
-import { BaseCommand } from '@adonisjs/core/ace'
+import { BaseCommand, flags } from '@adonisjs/core/ace'
 import type { CommandOptions } from '@adonisjs/core/types/ace'
 import { DateTime } from 'luxon'
 import DailyUnit from '#models/daily_unit'
@@ -13,13 +13,82 @@ export default class DailyUnitChose extends BaseCommand {
     startApp: true,
   }
 
+  @flags.number({
+    alias: 'u',
+    description: 'The unit ID to set in the daily (bypasses the ignored candidates).',
+  })
+  declare unit?: number
+
+  @flags.number({
+    alias: 'c',
+    description: 'Number of past days for which a unit cannot be picked again once played.',
+    default: schedulerConfig.daily_unit_chose.ignore_last_x_units as number,
+  })
+  declare cooldown: number
+
+  @flags.string({
+    alias: 'd',
+    description: 'The targeted day. Defaults to today if not set. Expected format: YYYY-MM-DD',
+  })
+  declare day?: string
+
   async run() {
-    const config = schedulerConfig.daily_unit_chose
-    const today: DateTime = DateTime.now().toUTC()
+    const today: DateTime = this.getTargetDate()
 
-    this.logger.info(`Starting daily unit command for '${today.toFormat('ccc dd/LL/yyyy')}'`)
+    this.logger.info(`Starting daily unit command for '${today.toFormat('ccc dd/LL/yyyy')}'...`)
 
-    const entriesToIgnore: Unit[] = await this.getLastEntriesToIgnore(config.ignore_last_x_units)
+    const chosenUnit: Unit = await this.getChosenUnit()
+
+    this.logger.info(`Chosen unit: ${chosenUnit.name} (ID: ${chosenUnit.id}). Creating entry...`)
+
+    await this.insertOrUpdateEntry(chosenUnit, today)
+
+    this.logger.success(
+      `Successfully set unit '${chosenUnit.name}' (#${chosenUnit.id}) to the daily unit for the ${today.toFormat('ccc dd/LL/yyyy')}.`
+    )
+
+    await this.terminate()
+  }
+
+  /**
+   * Inserts or updates the existing entry. (To prevent unique() constraint from triggering in the DB).
+   * @private
+   */
+  private async insertOrUpdateEntry(unit: Unit, day: DateTime): Promise<void> {
+    const matchingEntry: DailyUnit | null = await DailyUnit.findBy({ day })
+
+    if (null === matchingEntry) {
+      await this.insertChosen(unit.id, day)
+    } else {
+      this.logger.info(`The entry #${matchingEntry.id} already exists. Updating it...`)
+      matchingEntry.updatedAt = DateTime.now().toUTC()
+      await matchingEntry.related('unit').associate(unit)
+      await matchingEntry.save()
+    }
+  }
+
+  /**
+   * Returns the date for the daily unit. Returns today of no days have been chosen.
+   * @private
+   */
+  private getTargetDate(): DateTime {
+    if (!this.day) {
+      return DateTime.now().toUTC()
+    }
+
+    return DateTime.fromFormat(this.day, 'yyyy-M-d').toUTC()
+  }
+
+  /**
+   * Returns the chosen unit for the command.
+   * @private
+   */
+  private async getChosenUnit(): Promise<Unit> {
+    if (undefined !== this.unit) {
+      return await Unit.findOrFail(this.unit as number)
+    }
+
+    const entriesToIgnore: Unit[] = await this.getLastEntriesToIgnore(this.cooldown)
     const possibleCandidates: Unit[] = await this.getDailyCandidates(entriesToIgnore)
 
     this.logger.info(
@@ -28,17 +97,8 @@ export default class DailyUnitChose extends BaseCommand {
 
     const chosenId: number =
       possibleCandidates[Math.floor(Math.random() * possibleCandidates.length)].id
-    const chosenUnit: Unit = await Unit.findOrFail(chosenId)
 
-    this.logger.info(`Chosen unit: ${chosenUnit.name} (ID: ${chosenUnit.id}). Creating entry...`)
-
-    await this.insertChosen(chosenId, today)
-
-    this.logger.success(
-      `Successfully added unit '${chosenUnit.name}' (#${chosenUnit.id}) to the daily unit for the ${today.toFormat('ccc dd/LL/yyyy')}.`
-    )
-
-    await this.terminate()
+    return await Unit.findOrFail(chosenId)
   }
 
   /**
