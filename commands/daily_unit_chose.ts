@@ -76,7 +76,15 @@ export default class DailyUnitChose extends BaseCommand {
       return DateTime.now().toUTC()
     }
 
-    return DateTime.fromFormat(this.day, 'yyyy-M-d').toUTC()
+    const result: DateTime = DateTime.fromFormat(this.day, 'yyyy-M-d', { zone: 'utc' })
+
+    if (!result.isValid) {
+      throw new Error(
+        `Date format is not valid (${result.invalidExplanation}). Please ensure the date is in format YYYY-MM-DD`
+      )
+    }
+
+    return result
   }
 
   /**
