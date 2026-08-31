@@ -116,6 +116,68 @@ test.group('Daily unit chose - Command', (group) => {
     assert.equal(entryUtc.toISODate(), fromObjUtc({ year: 2018, month: 8, day: 16 }).toISODate())
   })
 
+  test('ignores units used within the cooldown window when choosing a candidate', async ({
+    assert,
+  }) => {
+    const [ignoredUnit, availableUnit] = await UnitFactory.createMany(2)
+
+    await DailyUnitFactory.merge({
+      unitId: ignoredUnit.id,
+      day: fromObjUtc({ year: 2000, month: 5, day: 9 }),
+    }).create()
+
+    await execCommand(['--cooldown=1'])
+
+    const entry: DailyUnit = await DailyUnit.findByOrFail({
+      day: fromObjUtc({ year: 2000, month: 5, day: 10 }),
+    })
+
+    assert.equal(entry.unitId, availableUnit.id)
+  })
+
+  test('allows a previously used unit to be chosen again when the cooldown is set to 0', async ({
+    assert,
+  }) => {
+    const unit: Unit = await UnitFactory.create()
+
+    await DailyUnitFactory.merge({
+      unitId: unit.id,
+      day: fromObjUtc({ year: 2000, month: 5, day: 9 }),
+    }).create()
+
+    await execCommand(['--cooldown=0'])
+
+    const entry: DailyUnit = await DailyUnit.findByOrFail({
+      day: fromObjUtc({ year: 2000, month: 5, day: 10 }),
+    })
+
+    assert.equal(entry.unitId, unit.id)
+  })
+
+  test('allows a unit to be re-chosen once it falls outside the cooldown window', async ({
+    assert,
+  }) => {
+    const [expiredUnit, recentUnit] = await UnitFactory.createMany(2)
+
+    await DailyUnitFactory.merge({
+      unitId: expiredUnit.id,
+      day: fromObjUtc({ year: 2000, month: 5, day: 8 }),
+    }).create()
+
+    await DailyUnitFactory.merge({
+      unitId: recentUnit.id,
+      day: fromObjUtc({ year: 2000, month: 5, day: 9 }),
+    }).create()
+
+    await execCommand(['--cooldown=1'])
+
+    const entry: DailyUnit = await DailyUnit.findByOrFail({
+      day: fromObjUtc({ year: 2000, month: 5, day: 10 }),
+    })
+
+    assert.equal(entry.unitId, expiredUnit.id)
+  })
+
   test('no entries are created when the date ({date}) is not the expected format ({desc})')
     .with([
       { date: '20015-08-08', desc: '5-digit year' },

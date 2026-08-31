@@ -1,0 +1,7 @@
+{
+  "all": true,
+  "include": ["app/**", "commands/**"],
+  "reporter": ["html", "text"],
+  "extension": [".ts"],
+  "report-dir": "coverage"
+}
