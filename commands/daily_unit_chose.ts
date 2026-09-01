@@ -32,6 +32,13 @@ export default class DailyUnitChose extends BaseCommand {
   })
   declare day?: string
 
+  @flags.boolean({
+    alias: 'o',
+    description: 'Prevent this unit from being overwritten by this command.',
+    default: true,
+  })
+  declare overridable: boolean
+
   async run() {
     const today: DateTime = this.getTargetDate()
 
@@ -56,8 +63,8 @@ export default class DailyUnitChose extends BaseCommand {
     const matchingEntry: DailyUnit | null = await DailyUnit.findBy({ day })
 
     if (null === matchingEntry) {
-      await this.insertChosen(unit.id, day)
-    } else {
+      await this.insertChosen(unit.id, day, this.overridable)
+    } else if (matchingEntry.overridable) {
       this.logger.info(`The entry #${matchingEntry.id} already exists. Updating it...`)
       matchingEntry.updatedAt = DateTime.now().toUTC()
       await matchingEntry.related('unit').associate(unit)
@@ -140,7 +147,7 @@ export default class DailyUnitChose extends BaseCommand {
    * Inserts the chosen unit with this ID in the daily table
    * @private
    */
-  private async insertChosen(id: number, date: DateTime): Promise<DailyUnit> {
+  private async insertChosen(id: number, date: DateTime, overridable: boolean): Promise<DailyUnit> {
     const now: DateTime = DateTime.now()
 
     return DailyUnit.create({
@@ -148,6 +155,7 @@ export default class DailyUnitChose extends BaseCommand {
       day: date,
       createdAt: now,
       updatedAt: now,
+      overridable: overridable,
     })
   }
 }

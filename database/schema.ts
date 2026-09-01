@@ -40,7 +40,7 @@ export class CollaborationSchema extends BaseModel {
 }
 
 export class DailyUnitSchema extends BaseModel {
-  static $columns = ['createdAt', 'day', 'id', 'unitId', 'updatedAt'] as const
+  static $columns = ['createdAt', 'day', 'id', 'overridable', 'unitId', 'updatedAt'] as const
   $columns = DailyUnitSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
@@ -48,6 +48,8 @@ export class DailyUnitSchema extends BaseModel {
   declare day: DateTime
   @column({ isPrimary: true })
   declare id: number
+  @column()
+  declare overridable: boolean
   @column()
   declare unitId: number
   @column.dateTime({ autoCreate: true, autoUpdate: true })

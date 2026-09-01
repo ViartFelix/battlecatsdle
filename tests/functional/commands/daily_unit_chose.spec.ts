@@ -69,6 +69,7 @@ test.group('Daily unit chose - Command', (group) => {
     const entry: DailyUnit = await DailyUnitFactory.merge({
       unitId: unitA.id,
       day: fromObjUtc({ year: 2000, month: 5, day: 10 }),
+      overridable: true,
     }).create()
 
     await execCommand([`--unit=${unitB.id}`])
@@ -81,6 +82,89 @@ test.group('Daily unit chose - Command', (group) => {
     assert.equal(1, afterCount)
     assert.equal(entry.id, newEntry.id)
     assert.equal(newEntry.unitId, unitB.id)
+  })
+
+  test('does not update the already existing entry if it is not overridable', async ({
+    assert,
+  }) => {
+    const [unitA, unitB] = await UnitFactory.createMany(2)
+
+    const entry: DailyUnit = await DailyUnitFactory.merge({
+      unitId: unitA.id,
+      day: fromObjUtc({ year: 2000, month: 5, day: 10 }),
+      overridable: false,
+    }).create()
+
+    await execCommand([`--unit=${unitB.id}`])
+
+    const afterCount: number = await getRowCount()
+    const untouchedEntry: DailyUnit = await DailyUnit.findByOrFail({
+      day: fromObjUtc({ year: 2000, month: 5, day: 10 }),
+    })
+
+    assert.equal(1, afterCount)
+    assert.equal(entry.id, untouchedEntry.id)
+    assert.equal(untouchedEntry.unitId, unitA.id)
+  })
+
+  test('sets overridable to true on the inserted entry by default', async ({ assert }) => {
+    await UnitFactory.create()
+
+    await execCommand()
+
+    const entry: DailyUnit = await DailyUnit.findByOrFail({
+      day: fromObjUtc({ year: 2000, month: 5, day: 10 }),
+    })
+
+    assert.isTrue(entry.overridable)
+  })
+
+  test('sets overridable to false on the inserted entry when --no-overridable is passed', async ({
+    assert,
+  }) => {
+    await UnitFactory.create()
+
+    await execCommand(['--overridable=false'])
+
+    const entry: DailyUnit = await DailyUnit.findByOrFail({
+      day: fromObjUtc({ year: 2000, month: 5, day: 10 }),
+    })
+
+    assert.isFalse(entry.overridable)
+  })
+
+  test('does nothing if the daily unit is not overridable', async ({ assert }) => {
+    const [unitA, unitB] = await UnitFactory.createMany(2)
+
+    const previousEntry: DailyUnit = await DailyUnitFactory.merge({
+      unitId: unitA.id,
+      day: fromObjUtc({ year: 2000, month: 5, day: 10 }),
+      overridable: false,
+    }).create()
+
+    await execCommand(['--day=2000-05-10', `--unit=${unitB.id}`])
+
+    const afterCount = await getRowCount()
+
+    const afterEntry: DailyUnit = await DailyUnit.findByOrFail({
+      day: fromObjUtc({ year: 2000, month: 5, day: 10 }),
+    })
+
+    if (null === previousEntry.updatedAt) {
+      assert.fail('The updated at of the previous entry is null')
+    }
+
+    assert.equal(afterEntry.unitId, previousEntry.unitId)
+    assert.equal(unitA.id, previousEntry.unitId)
+    assert.isFalse(afterEntry.overridable)
+
+    // no update
+    assert.equal(
+      (previousEntry.updatedAt as DateTime).toSeconds(),
+      (afterEntry.updatedAt as DateTime).toSeconds()
+    )
+    // no insert
+    assert.equal(afterCount, 1)
   })
 
   test('defaults to today if no date have been set in the args', async ({ assert }) => {

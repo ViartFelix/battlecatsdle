@@ -10,6 +10,9 @@ export default class extends BaseSchema {
       table.integer('unit_id').unsigned().notNullable()
       table.foreign('unit_id').references('units.id').onDelete('CASCADE')
 
+      // flag to prevent the update of the daily unit.
+      table.boolean('overridable').notNullable().defaultTo(false)
+
       table.date('day').unique().notNullable()
 
       table.timestamp('created_at')

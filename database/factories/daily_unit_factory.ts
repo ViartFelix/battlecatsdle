@@ -7,13 +7,14 @@ import { UnitFactory } from '#database/factories/unit_factory'
 let nextDay = DateTime.now().startOf('day')
 
 export const DailyUnitFactory = factory
-  .define(DailyUnit, async () => {
+  .define(DailyUnit, async ({ faker }) => {
     nextDay = nextDay.minus({ days: 1 })
 
     return {
       day: nextDay,
       createdAt: nextDay,
       updatedAt: nextDay,
+      overridable: faker.datatype.boolean({ probability: 0.75 }),
     }
   })
   .relation('unit', () => UnitFactory)
