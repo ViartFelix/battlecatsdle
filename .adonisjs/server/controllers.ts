@@ -4,7 +4,7 @@
  */
 
 export const controllers = {
+  Game: () => import('#controllers/game_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   Session: () => import('#controllers/session_controller'),
-  Game: () => import('#controllers/game_controller'),
 }

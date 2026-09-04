@@ -1,8 +1,12 @@
 @layout()
   <div>
-    <h1>Daily unit !</h1>
+    <div>
+      <h1>Daily unit</h1>
+      <h3>{{ day.toLocaleString() }}</h3>
+    </div>
 
-    <p>Day: {{ day.toString() }}</p>
-    <span>It is: {{ unit.name }}</span>
+    <section>
+      @!game.gameTable()
+    </section>
   </div>
 @end

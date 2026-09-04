@@ -7,7 +7,6 @@ export default class GameController {
   async display(context: HttpContext) {
     const today: DateTime = DateTime.utc().startOf('day')
 
-    // get the daily unit of today
     const daily: DailyUnit | null = await DailyUnit.findBy({
       day: today,
     })
