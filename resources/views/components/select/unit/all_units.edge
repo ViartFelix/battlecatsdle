@@ -1,0 +1,17 @@
+@let(options = $props.get('units', []))
+
+<div x-data="{open: false}">
+  <!--The trigger for the dropdown-->
+  <label>
+    <input x-on:focus="open = true" x-on:focusout="setTimeout(() => open = false, 150)" />
+  </label>
+
+  <!--The dialog that shows upon clicking on the label / input-->
+  <div x-show="open">
+    @each(unit in options)
+      <div x-on:click="$store.guessed_units.add({{ JSON.stringify(unit) }})">
+        @!select.unit.singleUnit({ unit: unit })
+      </div>
+    @end
+  </div>
+</div>

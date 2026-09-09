@@ -1,0 +1,10 @@
+@let(unit = $props.get('unit') ?? throwError('The "unit" prop is required on the single_unit component'))
+
+<div style="display: flex">
+  <img
+    style="width: 2rem; height: 2rem; object-fit: cover; object-position: center"
+    src="{{ unit.image }}"
+    alt="Image of {{ unit.name }}"
+  />
+  <p>#{{ unit.id }} {{ unit.name }}</p>
+</div>

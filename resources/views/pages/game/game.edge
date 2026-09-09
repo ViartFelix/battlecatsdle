@@ -5,8 +5,13 @@
       <h3>{{ day.toLocaleString() }}</h3>
     </div>
 
-    <section>
-      @!game.gameTable()
+    <section style="margin-top: 1rem;">
+      <p>Select !</p>
+      @!select.unit.allUnits({ units: all_units })
+
+      <div>
+        @!game.gameTable()
+      </div>
     </section>
   </div>
 @end

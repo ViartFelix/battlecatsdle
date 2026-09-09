@@ -16,10 +16,12 @@ export default class GameController {
     }
 
     const unit: Unit = await Unit.findOrFail(daily.unitId)
+    const allUnits: Unit[] = await Unit.all()
 
     return context.view.render('pages/game/game', {
       unit: unit,
       day: today,
+      all_units: allUnits,
     })
   }
 }

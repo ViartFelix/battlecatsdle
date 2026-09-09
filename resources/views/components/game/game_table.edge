@@ -1,6 +1,4 @@
-@let(xData = $props.get('xData', '{}'))
-
-<table x-data="{{ xData }}">
+<table>
   <thead>
     <tr>
       <th>#</th>
@@ -11,4 +9,19 @@
       <th>Rarity</th>
     </tr>
   </thead>
+
+  <tbody x-data="{guesses: $store.guessed_units.guessed}">
+    <template x-for="(unit, count) in guesses" :key="unit.id">
+      <tr>
+        <td x-text="count + 1"></td>
+        <td x-text="unit.name"></td>
+        <td x-text="unit.cost"></td>
+        <td x-text="unit.evolution"></td>
+        <td x-text="unit.rarity"></td>
+      </tr>
+    </template>
+  </tbody>
 </table>
+
+Bonsoir je suis à
+<span x-text="$store.guessed_units.guessed.length"></span>

@@ -17,4 +17,12 @@ Alpine.data('alert', function () {
   }
 })
 
+// Guessed units by the player.
+Alpine.store('guessed_units', {
+  guessed: [],
+  add(unit) {
+    this.guessed.push(unit)
+  },
+})
+
 Alpine.start()
