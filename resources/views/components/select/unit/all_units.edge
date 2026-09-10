@@ -1,15 +1,22 @@
 @let(options = $props.get('units', []))
 
-<div x-data="{open: false}">
+<div x-data="{open: false, search: ''}">
   <!--The trigger for the dropdown-->
   <label>
-    <input x-on:focus="open = true" x-on:focusout="setTimeout(() => open = false, 150)" />
+    <input
+      x-model="search"
+      x-on:focus="open = true"
+      x-on:focusout="setTimeout(() => open = false, 150)"
+    />
   </label>
-
   <!--The dialog that shows upon clicking on the label / input-->
   <div x-show="open">
     @each(unit in options)
-      <div x-on:click="$store.guessed_units.add({{ JSON.stringify(unit) }})">
+      <div
+        x-data="{ unit: {{ JSON.stringify(unit) }} , name: '{{ unit.name }}' }"
+        x-on:click="setTimeout(() => {$store.guessed_units.add(unit); search = ''}, 150)"
+        x-show="search === '' || name.toLowerCase().includes(search.toLowerCase())"
+      >
         @!select.unit.singleUnit({ unit: unit })
       </div>
     @end
