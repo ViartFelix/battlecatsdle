@@ -13,5 +13,9 @@
       @include('partials/flash_alerts')
       {{{ await $slots.main() }}}
     </main>
+    @if(process.env.DEBUG_BAR === 'true')
+      <script>window.__DEBUGBAR_ID__ = "{{ debugbarId }}"</script>
+      <script src="/__debugbar/static/debugbar.js"></script>
+    @end
   </body>
 </html>

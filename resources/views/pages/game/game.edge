@@ -1,16 +1,24 @@
 @layout()
-  <div>
+  <div x-data="{}">
+    <span x-show="false" x-init="$store.guessed_units.toGuess = {{ JSON.stringify(unit) }}; $el.remove()"></span>
+
     <div>
       <h1>Daily unit</h1>
       <h3>{{ day.toLocaleString() }}</h3>
     </div>
 
     <section style="margin-top: 1rem;">
-      <p>Select !</p>
-      @!select.unit.allUnits({ units: all_units })
+      <div x-show="!$store.guessed_units.hasWon">
+        <p>Select !</p>
+        @!select.unit.allUnits({ units: all_units })
+      </div>
 
       <div>
         @!game.gameTable()
+      </div>
+
+      <div x-show="$store.guessed_units.hasWon">
+        <h1>Yay ! You won !</h1>
       </div>
     </section>
   </div>

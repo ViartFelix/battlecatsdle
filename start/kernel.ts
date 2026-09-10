@@ -26,6 +26,9 @@ server.use([
   () => import('#middleware/container_bindings_middleware'),
   () => import('@adonisjs/static/static_middleware'),
   () => import('@adonisjs/vite/vite_middleware'),
+  //  ----- debug bar -----
+  () => import('adonis-debugbar/middleware'),
+  () => import('@adonisjs/core/bodyparser_middleware'),
 ])
 
 /**

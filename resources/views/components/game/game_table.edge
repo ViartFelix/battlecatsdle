@@ -16,8 +16,8 @@
         <td x-text="count + 1"></td>
         <td x-text="unit.name"></td>
         <td x-text="unit.cost"></td>
-        <td x-text="unit.evolution"></td>
-        <td x-text="unit.rarity"></td>
+        <td x-text="$evolutionToHumanString(unit.evolution)"></td>
+        <td x-text="$rarityToHumanString(unit.rarity)"></td>
       </tr>
     </template>
   </tbody>
