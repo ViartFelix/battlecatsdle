@@ -12,13 +12,17 @@
   <!--The dialog that shows upon clicking on the label / input-->
   <div x-show="open">
     @each(unit in options)
-      <div
+      <template
+        x-if="!$store.guessed_units.isUnitInGuessed(unit.id)"
         x-data="{ unit: {{ JSON.stringify(unit) }} , name: '{{ unit.name }}' }"
-        x-on:click="setTimeout(() => {$store.guessed_units.add(unit); search = ''}, 150)"
-        x-show="search === '' || name.toLowerCase().includes(search.toLowerCase())"
       >
-        @!select.unit.singleUnit({ unit: unit })
-      </div>
+        <div
+          x-on:click="setTimeout(() => {$store.guessed_units.add(unit); search = ''}, 150)"
+          x-show="search === '' || name.toLowerCase().includes(search.toLowerCase())"
+        >
+          @!select.unit.singleUnit({ unit: unit })
+        </div>
+      </template>
     @end
   </div>
 </div>

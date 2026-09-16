@@ -9,6 +9,6 @@
 */
 
 import edge from 'edge.js'
-import { throwError } from '../resources/js/util/edgejs_utils.js'
+import { throwError } from '../app/utils/edgejs_utils.js'
 
 edge.global('throwError', throwError)
