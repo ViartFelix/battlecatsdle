@@ -1,7 +1,8 @@
 import { Unit } from '../class/unit.ts'
+import { ProcessedPlayerGuess } from './game.js'
 
 export type GuessedUnitsStore = {
-  guessed: Unit[]
+  guessed: ProcessedPlayerGuess[]
   toGuess: null | Unit
   hasWon: boolean
 

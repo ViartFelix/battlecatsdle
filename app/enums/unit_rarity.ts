@@ -13,4 +13,13 @@ export function isUnitRarity(value: unknown): value is UnitRarity {
   return tryFrom(UnitRarity, value) !== null
 }
 
+export const unitRarityOrder: UnitRarity[] = [
+  UnitRarity.Normal,
+  UnitRarity.Special,
+  UnitRarity.Rare,
+  UnitRarity.Super,
+  UnitRarity.Uber,
+  UnitRarity.Legend,
+]
+
 export default UnitRarity

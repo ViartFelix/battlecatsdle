@@ -17,3 +17,17 @@ export function from<T extends Record<string, string | number>>(
 
   return result
 }
+
+/**
+ * Returns the difference of indexes between two elements of a given array.
+ * @param order
+ * @param fromElement
+ * @param toElement
+ */
+export function getOrderDifference<T extends Object>(
+  order: T[],
+  fromElement: T,
+  toElement: T
+): number {
+  return order.indexOf(fromElement) - order.indexOf(toElement)
+}

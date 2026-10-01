@@ -226,6 +226,27 @@ button:hover {
   align-items: center;
 }
 
+/* Guess table */
+.guess-correct {
+  background: #00a63e1a;
+  color: #00a63e;
+}
+.guess-maybe {
+  background: #e7b0081a;
+  color: #a07a00;
+}
+.guess-incorrect {
+  background: var(--gray-3);
+  color: var(--gray-7);
+}
+
+.guess-up::after {
+  content: ' ▲';
+}
+.guess-down::after {
+  content: ' ▼';
+}
+
 @keyframes scale-up {
   from {
     transform: scale(0.7);

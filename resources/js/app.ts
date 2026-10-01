@@ -4,6 +4,9 @@ import UnitEvolution from '#enums/unit_evolution'
 import UnitRarity from '#enums/unit_rarity'
 import { GuessedUnitsStore } from './lib/type/alpine_js.js'
 import { Unit } from './lib/class/unit.js'
+import UnitGuessProcessor from './lib/class/unit_guess_processor.js'
+import { GuessReturn, ProcessedPlayerGuess } from './lib/type/game.js'
+import { GuessStatus, GuessStatusDetail } from './lib/enum/guess_status.js'
 
 Alpine.data('alert', function () {
   return {
@@ -24,6 +27,32 @@ Alpine.data('alert', function () {
 
 Alpine.magic('rarityToHumanString', () => (rarity: UnitRarity) => rarityToHumanString(rarity))
 Alpine.magic('evolutionToHumanString', () => (evo: UnitEvolution) => evolutionToHumanString(evo))
+Alpine.magic('guessResultToClass', () => (result: GuessReturn)=> {
+  const classes: string[] = [];
+
+  switch (result.primary) {
+    case GuessStatus.CORRECT:
+      classes.push('guess-correct')
+      break;
+    case GuessStatus.MAYBE:
+      classes.push('guess-maybe')
+      break;
+    case GuessStatus.INCORRECT:
+      classes.push('guess-incorrect')
+      break;
+  }
+
+  switch (result.details) {
+    case GuessStatusDetail.UP:
+      classes.push('guess-up')
+      break
+    case GuessStatusDetail.DOWN:
+      classes.push('guess-down')
+      break;
+  }
+
+  return classes.join(' ')
+})
 
 // Guessed units by the player.
 Alpine.store('guessed_units', {
@@ -38,7 +67,14 @@ Alpine.store('guessed_units', {
     if( null === this.toGuess ) return;
     if( this._guessCache.has(unit.id) ) return;
 
-    this.guessed.push(unit)
+    const processor = new UnitGuessProcessor(unit, this.toGuess)
+    const result: Omit<ProcessedPlayerGuess, 'unit'> = processor.guessAllColumns()
+
+    this.guessed.push({
+      ...result,
+      unit: unit,
+    })
+
     this._guessCache.set(unit.id, true)
 
     if (unit.id === this.toGuess.id) {
